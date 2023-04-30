@@ -18,7 +18,7 @@ To build and run the project, follow these steps:
 
 * Clone the repository: `git clone https://github.com/azizCan10/ActOfGod_API_Frontend.git`
 * Navigate to the project directory
-* Build the project: npm install
-* Run the project: npm start
+* Install dependencies: `npm install`
+* Start the application: `npm start`
 
--> The application will be available at http://localhost:3000.
+-> The application will be available at http://localhost:3000
