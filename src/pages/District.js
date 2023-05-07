@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import axios from "axios";
 
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import AddDistrict from '../modals/AddDistrict';
 
@@ -35,6 +35,16 @@ export default function District() {
     }
     /* ------------------------- */
 
+    const [showUpdateDistrictModal, setShowUpdateDistrictModal] = useState(false);
+
+    const { id } = useParams();
+
+    const updateDistrict = async (e) => {
+        e.preventDefault();
+        await axios.put(`/district/${id}`, createDistrict);
+        setShowUpdateDistrictModal(false);
+    }
+
     useEffect(() => {
         loadDistricts()
     }, [])
@@ -64,7 +74,7 @@ export default function District() {
                                         <td>{district.name}</td>
                                         <td>{district.cityName}</td>
                                         <td>
-                                            <Link className="btn btn-secondary mx-2">Güncelle</Link>
+                                            <Link className="btn btn-secondary mx-2" to={`/district/${district.id}`} onClick={() => setShowUpdateDistrictModal(true)}>Güncelle</Link>
                                             <Link className="btn btn-danger mx-2">Sil</Link>
                                         </td>
                                     </tr>
@@ -84,6 +94,18 @@ export default function District() {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateDistrictModal(false)}>İptal</Button>
                     <Button variant="success" onClick={saveDistrict}>Ekle</Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Update district modal */}
+            <Modal show={showUpdateDistrictModal} onHide={() => setShowUpdateDistrictModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>İlçe Güncelle</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><AddDistrict createDistrict={createDistrict} setCreateDistrict={setCreateDistrict} /></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowUpdateDistrictModal(false)}>İptal</Button>
+                    <Button variant="success" onClick={updateDistrict}>Güncelle</Button>
                 </Modal.Footer>
             </Modal>
         </>
