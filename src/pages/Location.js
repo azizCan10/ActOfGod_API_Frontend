@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import axios from "axios";
 
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import AddLocation from '../modals/AddLocation';
 
 import { Button, Modal } from 'react-bootstrap';
-
 
 export default function Location() {
 
@@ -36,6 +35,16 @@ export default function Location() {
         await axios.post("/location", createLocation);
     }
     /* ------------------------- */
+
+    const [showUpdateLocationModal, setShowUpdateLocationModal] = useState(false);
+
+    const { id } = useParams();
+
+    const updateLocation = async (e) => {
+        e.preventDefault();
+        await axios.put(`/location/${id}`, createLocation);
+        setShowUpdateLocationModal(false);
+    }
 
     useEffect(() => {
         loadLocations()
@@ -70,7 +79,7 @@ export default function Location() {
                                         <td>{location.capacity}</td>
                                         <td>{location.districtName}</td>
                                         <td>
-                                            <Link className="btn btn-secondary mx-2">Güncelle</Link>
+                                            <Link className="btn btn-secondary mx-2" to={`/location/${location.id}`} onClick={() => setShowUpdateLocationModal(true)}>Güncelle</Link>
                                             <Link className="btn btn-danger mx-2">Sil</Link>
                                         </td>
                                     </tr>
@@ -90,6 +99,18 @@ export default function Location() {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateLocationModal(false)}>İptal</Button>
                     <Button variant="success" onClick={saveLocation}>Ekle</Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Update location modal */}
+            <Modal show={showUpdateLocationModal} onHide={() => setShowUpdateLocationModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Konum Güncelle</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><AddLocation createLocation={createLocation} setCreateLocation={setCreateLocation} /></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowUpdateLocationModal(false)}>İptal</Button>
+                    <Button variant="success" onClick={updateLocation}>Güncelle</Button>
                 </Modal.Footer>
             </Modal>
         </>

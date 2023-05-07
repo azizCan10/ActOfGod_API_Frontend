@@ -20,8 +20,13 @@ function App() {
                     <Route index element={<Login />} />
 
                     <Route exact path="/city" element={<City />} />
+                    <Route exact path="/city/:id" element={<City />} />
+
                     <Route exact path="/district" element={<District />} />
+                    <Route exact path="/district/:id" element={<District />} />
+
                     <Route exact path="/location" element={<Location />} />
+                    <Route exact path="/location/:id" element={<Location />} />
                 </Routes>
             </Router>
         </div>
