@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import axios from "axios";
 
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import AddCity from '../modals/AddCity';
 
@@ -33,6 +33,16 @@ export default function City() {
     }
     /* ------------------------- */
 
+    const [showUpdateCityModal, setShowUpdateCityModal] = useState(false);
+
+    const { id } = useParams();
+
+    const updateCity = async (e) => {
+        e.preventDefault();
+        await axios.put(`/city/${id}`, createCity);
+        setShowUpdateCityModal(false);
+    }
+
     useEffect(() => {
         loadCities()
     }, [])
@@ -60,7 +70,7 @@ export default function City() {
                                         <th scope="row">{index + 1}</th>
                                         <td>{city.name}</td>
                                         <td>
-                                            <Link className="btn btn-secondary mx-2">Güncelle</Link>
+                                            <Link className="btn btn-secondary mx-2" to={`/city/${city.id}`} onClick={() => setShowUpdateCityModal(true)}>Güncelle</Link>
                                             <Link className="btn btn-danger mx-2">Sil</Link>
                                         </td>
                                     </tr>
@@ -80,6 +90,18 @@ export default function City() {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateCityModal(false)}>İptal</Button>
                     <Button variant="success" onClick={saveCity}>Ekle</Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Update city modal */}
+            <Modal show={showUpdateCityModal} onHide={() => setShowUpdateCityModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>İl Güncelle</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><AddCity createCity={createCity} setCreateCity={setCreateCity} /></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowUpdateCityModal(false)}>İptal</Button>
+                    <Button variant="success" onClick={updateCity}>Güncelle</Button>
                 </Modal.Footer>
             </Modal>
         </>
