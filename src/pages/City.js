@@ -1,54 +1,63 @@
 import React, { useEffect, useState } from 'react'
 
-import axios from "axios";
-
 import { Link, useParams } from 'react-router-dom';
-
-import AddCity from '../modals/AddCity';
 
 import { Button, Modal } from 'react-bootstrap';
 
+import axios from "axios";
+
+import CreateCityModal from '../modals/city/CreateCityModal';
+import UpdateCityModal from "../modals/city/UpdateCityModal";
+
+/**
+ * This is City Page
+ */
 export default function City() {
 
-    /* loading cities into table */
-    const [cities, setCities] = useState([])
+    //city list for city table
+    const [cityList, setCityList] = useState([])
 
-    const loadCities = async () => {
-        const result = await axios.get("/city")
-        setCities(result.data);
-    }
-    /* ---------------------------- */
-
-    /* for create city modal */
+    //modals
     const [showCreateCityModal, setShowCreateCityModal] = useState(false);
+    const [showUpdateCityModal, setShowUpdateCityModal] = useState(false);
 
-    const [createCity, setCreateCity] = useState({
+    //dtos
+    const [createCityDto, setCreateCityDto] = useState({
         name: ""
     })
 
+    const [updateCityDto, setUpdateCityDto] = useState({
+        name: ""
+    })
+
+    //get id from url to update / delete city
+    const { id } = useParams();
+
+    //crud operations
+    const getCityList = async () => {
+        const result = await axios.get("/city")
+        setCityList(result.data);
+    }
+
     const saveCity = async (e) => {
         e.preventDefault();
-        await axios.post("/city", createCity);
+        await axios.post("/city", createCityDto);
         setShowCreateCityModal(false);
     }
-    /* ------------------------- */
-
-    const [showUpdateCityModal, setShowUpdateCityModal] = useState(false);
-
-    const { id } = useParams();
 
     const updateCity = async (e) => {
         e.preventDefault();
-        await axios.put(`/city/${id}`, createCity);
+        await axios.put(`/city/${id}`, updateCityDto);
         setShowUpdateCityModal(false);
     }
 
     const deleteCity = async (e) => {
         await axios.delete(`/city/${id}`);
+        getCityList();
     }
 
     useEffect(() => {
-        loadCities()
+        getCityList()
     }, [])
 
     return (
@@ -69,7 +78,7 @@ export default function City() {
                         </thead>
                         <tbody>
                             {
-                                cities.map((city, index) => (
+                                cityList.map((city, index) => (
                                     <tr key={index}>
                                         <th scope="row">{index + 1}</th>
                                         <td>{city.name}</td>
@@ -90,7 +99,7 @@ export default function City() {
                 <Modal.Header closeButton>
                     <Modal.Title>İl Ekle</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><AddCity createCity={createCity} setCreateCity={setCreateCity} /></Modal.Body>
+                <Modal.Body><CreateCityModal createCity={createCityDto} setCreateCity={setCreateCityDto} /></Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateCityModal(false)}>İptal</Button>
                     <Button variant="success" onClick={saveCity}>Ekle</Button>
@@ -102,7 +111,7 @@ export default function City() {
                 <Modal.Header closeButton>
                     <Modal.Title>İl Güncelle</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><AddCity createCity={createCity} setCreateCity={setCreateCity} /></Modal.Body>
+                <Modal.Body><UpdateCityModal updateCity={updateCityDto} setUpdateCity={setUpdateCityDto} /></Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowUpdateCityModal(false)}>İptal</Button>
                     <Button variant="success" onClick={updateCity}>Güncelle</Button>

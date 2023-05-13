@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 
-import axios from "axios";
-
 import { Link, useParams } from 'react-router-dom';
-
-import AddLocation from '../modals/AddLocation';
 
 import { Button, Modal } from 'react-bootstrap';
 
+import axios from "axios";
+
+import CreateLocationModal from '../modals/location/CreateLocationModal';
+import UpdateLocationModal from "../modals/location/UpdateLocationModal";
+
+/**
+ * This is Location Page
+ */
 export default function Location() {
 
-    /* loading locations into table */
-    const [locations, setLocations] = useState([])
+    //location list for location table
+    const [locationList, setLocationList] = useState([])
 
-    const loadLocations = async () => {
-        const result = await axios.get("/location")
-        setLocations(result.data);
-    }
-    /* ---------------------------- */
-
-    /* for create location modal */
+    //modals
     const [showCreateLocationModal, setShowCreateLocationModal] = useState(false);
+    const [showUpdateLocationModal, setShowUpdateLocationModal] = useState(false);
 
-    const [createLocation, setCreateLocation] = useState({
+    //dtos
+    const [createLocationDto, setCreateLocationDto] = useState({
         name: "",
         latitude: "",
         longitude: "",
@@ -30,29 +30,42 @@ export default function Location() {
         districtId: ""
     })
 
+    const [updateLocationDto, setUpdateLocationDto] = useState({
+        name: "",
+        latitude: "",
+        longitude: "",
+        capacity: "",
+        districtId: ""
+    })
+
+    //get id from url to update / delete location
+    const { id } = useParams();
+
+    //crud operations
+    const getLocationList = async () => {
+        const result = await axios.get("/location")
+        setLocationList(result.data);
+    }
+
     const saveLocation = async (e) => {
         e.preventDefault();
-        await axios.post("/location", createLocation);
+        await axios.post("/location", createLocationDto);
         setShowCreateLocationModal(false);
     }
-    /* ------------------------- */
-
-    const [showUpdateLocationModal, setShowUpdateLocationModal] = useState(false);
-
-    const { id } = useParams();
 
     const updateLocation = async (e) => {
         e.preventDefault();
-        await axios.put(`/location/${id}`, createLocation);
+        await axios.put(`/location/${id}`, updateLocationDto);
         setShowUpdateLocationModal(false);
     }
 
     const deleteLocation = async (e) => {
         await axios.delete(`/location/${id}`);
+        getLocationList();
     }
 
     useEffect(() => {
-        loadLocations()
+        getLocationList();
     }, [])
 
     return (
@@ -76,7 +89,7 @@ export default function Location() {
                         </thead>
                         <tbody>
                             {
-                                locations.map((location, index) => (
+                                locationList.map((location, index) => (
                                     <tr key={index}>
                                         <th scope="row">{index + 1}</th>
                                         <td>{location.name}</td>
@@ -100,7 +113,7 @@ export default function Location() {
                 <Modal.Header closeButton>
                     <Modal.Title>Konum Ekle</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><AddLocation createLocation={createLocation} setCreateLocation={setCreateLocation} /></Modal.Body>
+                <Modal.Body><CreateLocationModal createLocation={createLocationDto} setCreateLocation={setCreateLocationDto} /></Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateLocationModal(false)}>İptal</Button>
                     <Button variant="success" onClick={saveLocation}>Ekle</Button>
@@ -112,7 +125,7 @@ export default function Location() {
                 <Modal.Header closeButton>
                     <Modal.Title>Konum Güncelle</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><AddLocation createLocation={createLocation} setCreateLocation={setCreateLocation} /></Modal.Body>
+                <Modal.Body><UpdateLocationModal updateLocation={updateLocationDto} setUpdateLocation={setUpdateLocationDto} /></Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowUpdateLocationModal(false)}>İptal</Button>
                     <Button variant="success" onClick={updateLocation}>Güncelle</Button>

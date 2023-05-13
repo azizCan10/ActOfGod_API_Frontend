@@ -2,24 +2,26 @@ import React, { useState, useEffect } from 'react'
 
 import axios from "axios";
 
-export default function AddDistrict({ createDistrict, setCreateDistrict }) {
+/**
+ * This function defines adding district modal
+ */
+export default function CreateDistrictModal({ createDistrict, setCreateDistrict }) {
 
-    const onInputChange = (e) => {
+    //sets district parameters according to inputs
+    const onDistrictChange = (e) => {
         setCreateDistrict({ ...createDistrict, [e.target.name]: e.target.value });
-        console.log(createDistrict)
     }
 
-    /* loading cities into table */
-    const [cities, setCities] = useState([])
+    //city list
+    const [cityList, setCityList] = useState([])
 
-    const loadCities = async () => {
+    const getCityList = async () => {
         const result = await axios.get("/city")
-        setCities(result.data);
+        setCityList(result.data);
     }
-    /* ---------------------------- */
 
     useEffect(() => {
-        loadCities()
+        getCityList()
     }, [])
 
     return (
@@ -29,12 +31,12 @@ export default function AddDistrict({ createDistrict, setCreateDistrict }) {
                     <form>
                         <div className="mb-3">
                             <label htmlFor="name" className="form-label">İlçe Adı</label>
-                            <input type={"text"} className="form-control" name="name" value={createDistrict.name} onChange={(e) => onInputChange(e)} />
+                            <input type={"text"} className="form-control" name="name" value={createDistrict.name} onChange={(e) => onDistrictChange(e)} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cityId" className="form-label">İl Adı</label>
-                            <select class="form-select" id="exampleFormControlSelect1" name="cityId" onChange={(e) => onInputChange(e)}>
-                                {cities.map((city) => (
+                            <select className="form-select" id="exampleFormControlSelect1" name="cityId" onChange={(e) => onDistrictChange(e)}>
+                                {cityList.map((city) => (
                                     <option value={city.id}>{city.name}</option>
                                 ))}
                             </select>

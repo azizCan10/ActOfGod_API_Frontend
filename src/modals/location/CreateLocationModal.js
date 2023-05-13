@@ -4,26 +4,29 @@ import axios from "axios";
 
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 
-export default function AddDistrict({ createLocation, setCreateLocation }) {
+/**
+ * This function defines adding location modal
+ */
+export default function CreateLocationModal({ createLocation, setCreateLocation }) {
 
-    const onInputChange = (e) => {
+    //sets location parameters according to inputs
+    const onLocationChange = (e) => {
         setCreateLocation({ ...createLocation, [e.target.name]: e.target.value });
     }
 
-    /* loading districts into table */
-    const [districts, setDistricts] = useState([])
+    //district list
+    const [districtList, setDistrictList] = useState([])
 
-    const loadDistricts = async () => {
+    const getDistrictList = async () => {
         const result = await axios.get("/district")
-        setDistricts(result.data);
+        setDistrictList(result.data);
     }
-    /* ---------------------------- */
 
     useEffect(() => {
-        loadDistricts()
+        getDistrictList()
     }, [])
 
-    //google maps
+    //google maps configurations
     const containerStyle = {
         width: '400px',
         height: '400px'
@@ -41,16 +44,16 @@ export default function AddDistrict({ createLocation, setCreateLocation }) {
                     <form>
                         <div className="mb-3">
                             <label htmlFor="name" className="form-label">Adres Adı</label>
-                            <input type={"text"} className="form-control" name="name" value={createLocation.name} onChange={(e) => onInputChange(e)} />
+                            <input type={"text"} className="form-control" name="name" value={createLocation.name} onChange={(e) => onLocationChange(e)} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="capacity" className="form-label">Kapasite</label>
-                            <input type={"text"} className="form-control" name="capacity" value={createLocation.capacity} onChange={(e) => onInputChange(e)} />
+                            <input type={"text"} className="form-control" name="capacity" value={createLocation.capacity} onChange={(e) => onLocationChange(e)} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="districtId" className="form-label">İlçe Adı</label>
-                            <select class="form-select" id="exampleFormControlSelect1"  name="districtId" onChange={(e) => onInputChange(e)}>
-                                {districts.map((district) => (
+                            <select className="form-select" id="exampleFormControlSelect1"  name="districtId" onChange={(e) => onLocationChange(e)}>
+                                {districtList.map((district) => (
                                     <option value={district.id}>{district.name}</option>
                                 ))}
                             </select>

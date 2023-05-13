@@ -1,56 +1,65 @@
 import React, { useEffect, useState } from 'react'
 
-import axios from "axios";
-
 import { Link, useParams } from 'react-router-dom';
-
-import AddDistrict from '../modals/AddDistrict';
 
 import { Button, Modal } from 'react-bootstrap';
 
+import axios from "axios";
 
+import CreateDistrictModal from '../modals/district/CreateDistrictModal';
+import UpdateDistrictModal from "../modals/district/UpdateDistrictModal";
+
+/**
+ * This is District Page
+ */
 export default function District() {
 
-    /* loading districts into table */
-    const [districts, setDistricts] = useState([])
+    //district list for district table
+    const [districtList, setDistrictList] = useState([])
 
-    const loadDistricts = async () => {
-        const result = await axios.get("/district")
-        setDistricts(result.data);
-    }
-    /* ---------------------------- */
-
-    /* for create discrict modal */
+    //modals
     const [showCreateDistrictModal, setShowCreateDistrictModal] = useState(false);
+    const [showUpdateDistrictModal, setShowUpdateDistrictModal] = useState(false);
 
-    const [createDistrict, setCreateDistrict] = useState({
+    //dtos
+    const [createDistrictDto, setCreateDistrictDto] = useState({
         name: "",
         cityId: ""
     })
 
+    const [updateDistrictDto, setUpdateDistrictDto] = useState({
+        name: "",
+        cityId: ""
+    })
+
+    //get id from url to update / delete district
+    const { id } = useParams();
+
+    //crud operations
+    const getDistrictList = async () => {
+        const result = await axios.get("/district")
+        setDistrictList(result.data);
+    }
+
     const saveDistrict = async (e) => {
         e.preventDefault();
-        await axios.post("/district", createDistrict);
+        await axios.post("/district", createDistrictDto);
         setShowCreateDistrictModal(false);
     }
-    /* ------------------------- */
-
-    const [showUpdateDistrictModal, setShowUpdateDistrictModal] = useState(false);
-
-    const { id } = useParams();
 
     const updateDistrict = async (e) => {
         e.preventDefault();
-        await axios.put(`/district/${id}`, createDistrict);
+        await axios.put(`/district/${id}`, updateDistrictDto);
         setShowUpdateDistrictModal(false);
     }
 
     const deleteDistrict = async (e) => {
         await axios.delete(`/district/${id}`);
+        getDistrictList();
     }
 
     useEffect(() => {
-        loadDistricts()
+        getDistrictList()
     }, [])
 
     return (
@@ -72,7 +81,7 @@ export default function District() {
                         </thead>
                         <tbody>
                             {
-                                districts.map((district, index) => (
+                                districtList.map((district, index) => (
                                     <tr key={index}>
                                         <th scope="row">{index + 1}</th>
                                         <td>{district.name}</td>
@@ -94,7 +103,7 @@ export default function District() {
                 <Modal.Header closeButton>
                     <Modal.Title>İlçe Ekle</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><AddDistrict createDistrict={createDistrict} setCreateDistrict={setCreateDistrict} /></Modal.Body>
+                <Modal.Body><CreateDistrictModal createDistrict={createDistrictDto} setCreateDistrict={setCreateDistrictDto} /></Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateDistrictModal(false)}>İptal</Button>
                     <Button variant="success" onClick={saveDistrict}>Ekle</Button>
@@ -106,7 +115,7 @@ export default function District() {
                 <Modal.Header closeButton>
                     <Modal.Title>İlçe Güncelle</Modal.Title>
                 </Modal.Header>
-                <Modal.Body><AddDistrict createDistrict={createDistrict} setCreateDistrict={setCreateDistrict} /></Modal.Body>
+                <Modal.Body><UpdateDistrictModal updateDistrict={updateDistrictDto} setUpdateDistrict={setUpdateDistrictDto} /></Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowUpdateDistrictModal(false)}>İptal</Button>
                     <Button variant="success" onClick={updateDistrict}>Güncelle</Button>
