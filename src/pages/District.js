@@ -45,6 +45,10 @@ export default function District() {
         setShowUpdateDistrictModal(false);
     }
 
+    const deleteDistrict = async (e) => {
+        await axios.delete(`/district/${id}`);
+    }
+
     useEffect(() => {
         loadDistricts()
     }, [])
@@ -75,7 +79,7 @@ export default function District() {
                                         <td>{district.cityName}</td>
                                         <td>
                                             <Link className="btn btn-secondary mx-2" to={`/district/${district.id}`} onClick={() => setShowUpdateDistrictModal(true)}>Güncelle</Link>
-                                            <Link className="btn btn-danger mx-2">Sil</Link>
+                                            <Link className="btn btn-danger mx-2" to={`/district/${district.id}`} onClick={() => deleteDistrict()}>Sil</Link>
                                         </td>
                                     </tr>
                                 ))

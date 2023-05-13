@@ -33,6 +33,7 @@ export default function Location() {
     const saveLocation = async (e) => {
         e.preventDefault();
         await axios.post("/location", createLocation);
+        setShowCreateLocationModal(false);
     }
     /* ------------------------- */
 
@@ -44,6 +45,10 @@ export default function Location() {
         e.preventDefault();
         await axios.put(`/location/${id}`, createLocation);
         setShowUpdateLocationModal(false);
+    }
+
+    const deleteLocation = async (e) => {
+        await axios.delete(`/location/${id}`);
     }
 
     useEffect(() => {
@@ -80,7 +85,7 @@ export default function Location() {
                                         <td>{location.districtName}</td>
                                         <td>
                                             <Link className="btn btn-secondary mx-2" to={`/location/${location.id}`} onClick={() => setShowUpdateLocationModal(true)}>Güncelle</Link>
-                                            <Link className="btn btn-danger mx-2">Sil</Link>
+                                            <Link className="btn btn-danger mx-2" to={`/location/${location.id}`} onClick={() => deleteLocation()}>Sil</Link>
                                         </td>
                                     </tr>
                                 ))

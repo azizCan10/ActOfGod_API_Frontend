@@ -43,6 +43,10 @@ export default function City() {
         setShowUpdateCityModal(false);
     }
 
+    const deleteCity = async (e) => {
+        await axios.delete(`/city/${id}`);
+    }
+
     useEffect(() => {
         loadCities()
     }, [])
@@ -71,7 +75,7 @@ export default function City() {
                                         <td>{city.name}</td>
                                         <td>
                                             <Link className="btn btn-secondary mx-2" to={`/city/${city.id}`} onClick={() => setShowUpdateCityModal(true)}>Güncelle</Link>
-                                            <Link className="btn btn-danger mx-2">Sil</Link>
+                                            <Link className="btn btn-danger mx-2" to={`/city/${city.id}`} onClick={() => deleteCity()}>Sil</Link>
                                         </td>
                                     </tr>
                                 ))
