@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
-import axios from "axios";
 
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import axios from "axios";
 
 import 'react-toastify/dist/ReactToastify.css';
 
+/**
+ * This is Login Page
+ */
 export default function Login() {
 
+    //variables
     const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
 
+    //input changes
     const onUsernameChange = (e) => {
         setUsername(e.target.value);
     }
-
-    const [password, setPassword] = useState("")
 
     const onPasswordChange = (e) => {
         setPassword(e.target.value);

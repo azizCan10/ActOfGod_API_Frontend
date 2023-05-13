@@ -1,5 +1,8 @@
 import React from 'react'
 
+/**
+ * This is the navbar section
+ */
 export default function Navbar() {
     return (
         <div>
