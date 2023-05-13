@@ -38,7 +38,7 @@ export default function Location() {
         districtId: ""
     })
 
-    //get id from url to update / delete location
+    //get id from url to update location
     const { id } = useParams();
 
     //crud operations
@@ -51,16 +51,18 @@ export default function Location() {
         e.preventDefault();
         await axios.post("/location", createLocationDto);
         setShowCreateLocationModal(false);
+        getLocationList();
     }
 
     const updateLocation = async (e) => {
         e.preventDefault();
         await axios.put(`/location/${id}`, updateLocationDto);
         setShowUpdateLocationModal(false);
+        getLocationList();
     }
 
-    const deleteLocation = async (e) => {
-        await axios.delete(`/location/${id}`);
+    const deleteLocation = async (delete_id) => {
+        await axios.delete(`/location/${delete_id}`);
         getLocationList();
     }
 
@@ -98,7 +100,7 @@ export default function Location() {
                                         <td>{location.districtName}</td>
                                         <td>
                                             <Link className="btn btn-secondary mx-2" to={`/location/${location.id}`} onClick={() => setShowUpdateLocationModal(true)}>Güncelle</Link>
-                                            <Link className="btn btn-danger mx-2" to={`/location/${location.id}`} onClick={() => deleteLocation()}>Sil</Link>
+                                            <Link className="btn btn-danger mx-2" onClick={() => deleteLocation(location.id)}>Sil</Link>
                                         </td>
                                     </tr>
                                 ))

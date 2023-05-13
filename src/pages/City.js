@@ -30,7 +30,7 @@ export default function City() {
         name: ""
     })
 
-    //get id from url to update / delete city
+    //get id from url to update city
     const { id } = useParams();
 
     //crud operations
@@ -43,16 +43,18 @@ export default function City() {
         e.preventDefault();
         await axios.post("/city", createCityDto);
         setShowCreateCityModal(false);
+        getCityList();
     }
 
     const updateCity = async (e) => {
         e.preventDefault();
         await axios.put(`/city/${id}`, updateCityDto);
         setShowUpdateCityModal(false);
+        getCityList();
     }
 
-    const deleteCity = async (e) => {
-        await axios.delete(`/city/${id}`);
+    const deleteCity = async (delete_id) => {
+        await axios.delete(`/city/${delete_id}`);
         getCityList();
     }
 
@@ -84,7 +86,7 @@ export default function City() {
                                         <td>{city.name}</td>
                                         <td>
                                             <Link className="btn btn-secondary mx-2" to={`/city/${city.id}`} onClick={() => setShowUpdateCityModal(true)}>Güncelle</Link>
-                                            <Link className="btn btn-danger mx-2" to={`/city/${city.id}`} onClick={() => deleteCity()}>Sil</Link>
+                                            <Link className="btn btn-danger mx-2" onClick={() => deleteCity(city.id)}>Sil</Link>
                                         </td>
                                     </tr>
                                 ))

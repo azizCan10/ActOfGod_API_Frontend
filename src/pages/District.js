@@ -32,7 +32,7 @@ export default function District() {
         cityId: ""
     })
 
-    //get id from url to update / delete district
+    //get id from url to update district
     const { id } = useParams();
 
     //crud operations
@@ -45,16 +45,18 @@ export default function District() {
         e.preventDefault();
         await axios.post("/district", createDistrictDto);
         setShowCreateDistrictModal(false);
+        getDistrictList();
     }
 
     const updateDistrict = async (e) => {
         e.preventDefault();
         await axios.put(`/district/${id}`, updateDistrictDto);
         setShowUpdateDistrictModal(false);
+        getDistrictList();
     }
 
-    const deleteDistrict = async (e) => {
-        await axios.delete(`/district/${id}`);
+    const deleteDistrict = async (delete_id) => {
+        await axios.delete(`/district/${delete_id}`);
         getDistrictList();
     }
 
@@ -88,7 +90,7 @@ export default function District() {
                                         <td>{district.cityName}</td>
                                         <td>
                                             <Link className="btn btn-secondary mx-2" to={`/district/${district.id}`} onClick={() => setShowUpdateDistrictModal(true)}>Güncelle</Link>
-                                            <Link className="btn btn-danger mx-2" to={`/district/${district.id}`} onClick={() => deleteDistrict()}>Sil</Link>
+                                            <Link className="btn btn-danger mx-2" onClick={() => deleteDistrict(district.id)}>Sil</Link>
                                         </td>
                                     </tr>
                                 ))
