@@ -3,8 +3,6 @@
 ## Features
 
 * Admin login
-* CRUD city operations
-* CRUD district operations
 * CRUD location operations
 
 ## Technologies
