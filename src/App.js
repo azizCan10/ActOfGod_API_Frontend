@@ -5,8 +5,6 @@ import Location from './pages/Location';
 import axios from "axios";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from './pages/Login';
-import City from './pages/City';
-import District from './pages/District';
 
 function App() {
     axios.defaults.baseURL = 'http://localhost:8080/v1';
@@ -18,13 +16,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route index element={<Login />} />
-
-                    <Route exact path="/city" element={<City />} />
-                    <Route exact path="/city/:id" element={<City />} />
-
-                    <Route exact path="/district" element={<District />} />
-                    <Route exact path="/district/:id" element={<District />} />
-
+sg
                     <Route exact path="/location" element={<Location />} />
                     <Route exact path="/location/:id" element={<Location />} />
                 </Routes>

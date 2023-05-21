@@ -14,11 +14,6 @@ export default function Navbar() {
                                 <a className="nav-link" href="/">Giriş Yap</a>
                             </li>
                             <li className="nav-item active">
-                                <a className="nav-link" href="/city">İl</a>
-                            </li><li className="nav-item active">
-                                <a className="nav-link" href="/district">İlçe</a>
-                            </li>
-                            <li className="nav-item active">
                                 <a className="nav-link" href="/location">Konum</a>
                             </li>
                         </ul>
