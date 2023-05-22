@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 
 import axios from "axios";
 
-import {GoogleMap, LoadScript, Marker} from '@react-google-maps/api';
+import {GoogleMap, LoadScript} from '@react-google-maps/api';
 
 /**
  * This function defines adding location modal
@@ -14,16 +14,23 @@ export default function CreateLocationModal({createLocation, setCreateLocation})
         setCreateLocation({...createLocation, [e.target.name]: e.target.value});
     }
 
-    //district list
-    const [districtList, setDistrictList] = useState([])
+    //city and district list
+    const [cityList, setCityList] = useState([]);
+    const [districtList, setDistrictList] = useState([]);
 
-    const getDistrictList = async () => {
-        const result = await axios.get("/district")
+    //get city and district
+    const getCityList = async () => {
+        const result = await axios.get("/city");
+        setCityList(result.data);
+    }
+
+    const getDistrictListByCityId = async (e) => {
+        const result = await axios.get(`/district/getByCityId/${e.target.value}`);
         setDistrictList(result.data);
     }
 
     useEffect(() => {
-        getDistrictList()
+        getCityList();
     }, [])
 
     //google maps configurations
@@ -54,25 +61,30 @@ export default function CreateLocationModal({createLocation, setCreateLocation})
                     <form>
                         <div className="mb-3">
                             <label htmlFor="name" className="form-label">Adres Adı</label>
-                            <input type={"text"} className="form-control" name="name" value={createLocation.name}
-                                   onChange={(e) => onLocationChange(e)}/>
+                            <input type={"text"} className="form-control" name="name" value={createLocation.name} onChange={(e) => onLocationChange(e)}/>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="capacity" className="form-label">Kapasite</label>
-                            <input type={"text"} className="form-control" name="capacity"
-                                   value={createLocation.capacity} onChange={(e) => onLocationChange(e)}/>
+                            <input type={"text"} className="form-control" name="capacity" value={createLocation.capacity} onChange={(e) => onLocationChange(e)}/>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="districtId" className="form-label">İlçe Adı</label>
-                            <select className="form-select" id="exampleFormControlSelect1" name="districtId"
-                                    onChange={(e) => onLocationChange(e)}>
+                            <label htmlFor="cityId" className="form-label">İl</label>
+                            <select className="form-select" id="exampleFormControlSelect1" name="cityId" onChange={(e) => getDistrictListByCityId(e)}>
+                                {cityList.map((city) => (
+                                    <option value={city.id}>{city.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="districtId" className="form-label">İlçe</label>
+                            <select className="form-select" id="exampleFormControlSelect1" name="districtId" onChange={(e) => onLocationChange(e)}>
                                 {districtList.map((district) => (
                                     <option value={district.id}>{district.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div className="mb-3">
-                            <LoadScript googleMapsApiKey="AIzaSyAd4VpzsRvbAEE2vXpKYUud_J0tDxW8zmE">
+                            <LoadScript googleMapsApiKey="YOUR_API_KEY">
                                 <GoogleMap
                                     mapContainerStyle={containerStyle}
                                     center={center}
