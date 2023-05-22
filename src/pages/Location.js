@@ -52,8 +52,17 @@ export default function Location() {
         await axios.post("/location", createLocationDto);
         setShowCreateLocationModal(false);
         getLocationList();
+        clearCreateLocationDto();
     }
-
+    const  clearCreateLocationDto =()=>{
+        setCreateLocationDto({
+            name: "",
+            latitude: "",
+            longitude: "",
+            capacity: "",
+            districtId: ""
+        });
+    }
     const updateLocation = async (e) => {
         e.preventDefault();
         await axios.put(`/location/${id}`, updateLocationDto);
