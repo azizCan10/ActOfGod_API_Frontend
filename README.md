@@ -21,6 +21,11 @@ To build and run the project, follow these steps:
 * Clone the repository: `git clone https://github.com/azizCan10/ActOfGod_API_Frontend.git`
 * Navigate to the project directory
 * Install dependencies: `npm install`
+* src/modals/location/CreateLocationModal on line 87 and UpdateLocationModal on line 88;
+```js
+<LoadScript googleMapsApiKey="YOUR_API_KEY">
+```
+Put your Google Maps API Key instead of "YOUR_API_KEY"
 * Start the application: `npm start`
 
 -> The application will be available at http://localhost:3000
