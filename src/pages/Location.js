@@ -54,8 +54,9 @@ export default function Location() {
         setShowCreateLocationModal(false);
         getLocationList();
         clearCreateLocationDto();
+        window.location.reload()
     }
-    const  clearCreateLocationDto =()=>{
+    const clearCreateLocationDto =()=>{
         setCreateLocationDto({
             name: "",
             latitude: "",
@@ -64,16 +65,28 @@ export default function Location() {
             districtId: ""
         });
     }
+
     const updateLocation = async (e) => {
         e.preventDefault();
         await axios.put(`/location/${id}`, updateLocationDto);
         setShowUpdateLocationModal(false);
         getLocationList();
+        window.location.reload()
     }
 
     const deleteLocation = async (delete_id) => {
         await axios.delete(`/location/${delete_id}`);
         getLocationList();
+    }
+
+    const setUpdateLocationModal =()=>{
+        setShowUpdateLocationModal(false)
+        window.location.reload()
+    }
+
+    const setCreateLocationModal =()=>{
+        setShowCreateLocationModal(false)
+        window.location.reload()
     }
 
     useEffect(() => {
@@ -122,25 +135,25 @@ export default function Location() {
             </div>
 
             {/* Create location modal */}
-            <Modal show={showCreateLocationModal} onHide={() => setShowCreateLocationModal(false)}>
+            <Modal show={showCreateLocationModal} onHide={() => setCreateLocationModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Konum Ekle</Modal.Title>
                 </Modal.Header>
                 <Modal.Body><CreateLocationModal createLocation={createLocationDto} setCreateLocation={setCreateLocationDto} /></Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowCreateLocationModal(false)}>İptal</Button>
+                    <Button variant="secondary" onClick={() => setCreateLocationModal()}>İptal</Button>
                     <Button variant="success" onClick={saveLocation}>Ekle</Button>
                 </Modal.Footer>
             </Modal>
 
             {/* Update location modal */}
-            <Modal show={showUpdateLocationModal} onHide={() => setShowUpdateLocationModal(false)}>
+            <Modal show={showUpdateLocationModal} onHide={() => setUpdateLocationModal()}>
                 <Modal.Header closeButton>
                     <Modal.Title>Konum Güncelle</Modal.Title>
                 </Modal.Header>
                 <Modal.Body><UpdateLocationModal updateLocation={updateLocationDto} setUpdateLocation={setUpdateLocationDto} /></Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowUpdateLocationModal(false)}>İptal</Button>
+                    <Button variant="secondary" onClick={() => setUpdateLocationModal()}>İptal</Button>
                     <Button variant="success" onClick={updateLocation}>Güncelle</Button>
                 </Modal.Footer>
             </Modal>
