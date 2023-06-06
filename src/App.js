@@ -16,7 +16,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route index element={<Login />} />
-sg
+
                     <Route exact path="/location" element={<Location />} />
                     <Route exact path="/location/:id" element={<Location />} />
                 </Routes>

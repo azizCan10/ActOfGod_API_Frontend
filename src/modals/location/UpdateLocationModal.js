@@ -39,9 +39,15 @@ export default function UpdateLocationModal({updateLocation, setUpdateLocation})
         setDistrictList(result.data);
     }
 
+    const getDistrictListForFirstOpen = async () => {
+        const result = await axios.get("/district/getByCityId/1");
+        setDistrictList(result.data);
+    }
+
     useEffect(() => {
         getLocationById();
         getCityList();
+        getDistrictListForFirstOpen();
     }, [])
 
     //google maps configurations
@@ -51,8 +57,8 @@ export default function UpdateLocationModal({updateLocation, setUpdateLocation})
     };
 
     const center = {
-        lat: -3.745,
-        lng: -38.523
+        lat: 40.7654,
+        lng: 29.9408
     };
 
     return (
