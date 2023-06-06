@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
-
-import axios from "axios";
-
 import 'react-toastify/dist/ReactToastify.css';
 
 /**
@@ -11,11 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
  */
 export default function Login() {
 
-    //variables
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
-    //input changes
     const onUsernameChange = (e) => {
         setUsername(e.target.value);
     }
@@ -24,14 +19,15 @@ export default function Login() {
         setPassword(e.target.value);
     }
 
-    //TODO API PATH WILL BE WRITTEN
-    const login = async (username_, password_) => {
 
-        await axios.post(`/`, null, { params: {
-            username: username_,
-            password: password_,
-        }});
+    const login = () => {
+        if(username==='admin' && password==='admin'){
+            window.location.href = '/location';
+        }else{
+            alert("Hatalı giriş.");
+        } 
     }
+
 
     return (
         <div className="container">
@@ -47,7 +43,7 @@ export default function Login() {
                             <input type={"password"} className="form-control" name="password" onChange={(e) => onPasswordChange(e)} />
                         </div>
                         <div>
-                            <Link className="btn btn-success mx-2" to={`/admin`} onClick={() => login(username, password)}>Giriş Yap</Link>
+                            <Link className="btn btn-success mx-2" onClick={login}>Giriş Yap</Link>
                         </div>
                     </form>
                 </div>

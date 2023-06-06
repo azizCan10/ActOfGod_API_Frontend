@@ -8,6 +8,7 @@ import axios from "axios";
 
 import CreateLocationModal from '../modals/location/CreateLocationModal';
 import UpdateLocationModal from "../modals/location/UpdateLocationModal";
+import LogoutNavbar from '../layout/LogoutNavbar';
 
 /**
  * This is Location Page
@@ -81,6 +82,7 @@ export default function Location() {
 
     return (
         <>
+            <LogoutNavbar/>
             <div className="container">
                 <div className="py-4">
                     <button className="btn btn-primary mx-2" onClick={() => setShowCreateLocationModal(true)}>Konum Ekle</button>
